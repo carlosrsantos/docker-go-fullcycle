@@ -1,0 +1,15 @@
+FROM golang:alpine3.17 AS builder
+
+WORKDIR /usr/src/app
+
+COPY . .
+
+RUN go build -ldflags '-s -w' main.go 
+
+FROM scratch
+
+WORKDIR /
+
+COPY --from=builder /usr/src/app .
+
+ENTRYPOINT [ "/main"]
